@@ -1,0 +1,15 @@
+{
+    "id" : "FlyingIslands",
+    "version" : "1.0.0",
+    "author" : "sin3point14",
+    "displayName" : "FlyingIslands",
+    "description" : "Provides Flying Islands plugins to be used in worlds",
+    "dependencies" : [
+        {"id": "CoreAssets", "minVersion": "2.0.0"},
+        {"id": "CoreWorlds", "minVersion": "1.0.0"},
+        {"id": "CoreRendering", "minVersion": "1.0.0"}
+     ],
+    "serverSideOnly" : "false",
+    "isGameplay" : "true",
+    "defaultWorldGenerator" : "FlyingIslands:FlyingIslandsTestFlat"
+}
