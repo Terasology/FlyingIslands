@@ -10,6 +10,5 @@
         {"id": "CoreRendering", "minVersion": "1.0.0"}
      ],
     "serverSideOnly" : "false",
-    "isGameplay" : "true",
-    "defaultWorldGenerator" : "FlyingIslands:FlyingIslandsTestFlat"
+    "isWorld": true
 }
