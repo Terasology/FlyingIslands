@@ -44,10 +44,9 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
                 if (surfaceHeight > seaLevel && noise.noise(wx, wz) > 0.9999) {
                     FlyingIsland flyingIsland = new FlyingIsland(wx, wz);
 
-                    int lowestY = surfaceHeight + 60 +  Math.floorMod(wx * wz, 30);
+                    int lowestY = surfaceHeight + 60 + Math.floorMod(wx * wz, 30);
 
-                    if (lowestY >= flyingIslandFacet.getWorldRegion().minY()
-                            && lowestY <= flyingIslandFacet.getWorldRegion().maxY()) {
+                    if (flyingIslandFacet.getWorldRegion().contains(wx, lowestY, wz)) {
                         flyingIslandFacet.setWorld(wx, lowestY, wz, flyingIsland);
                     }
                 }

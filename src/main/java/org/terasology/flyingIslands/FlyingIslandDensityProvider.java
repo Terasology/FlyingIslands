@@ -3,9 +3,10 @@
 
 package org.terasology.flyingIslands;
 
+import org.joml.Vector3ic;
 import org.terasology.math.JomlUtil;
 import org.terasology.math.geom.BaseVector3i;
-import org.terasology.math.geom.Vector3i;
+import org.joml.Vector3i;
 import org.terasology.world.generation.Facet;
 import org.terasology.world.generation.FacetBorder;
 import org.terasology.world.generation.FacetProviderPlugin;
@@ -32,7 +33,7 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
         DensityFacet densityFacet = region.getRegionFacet(DensityFacet.class);
         SurfacesFacet surfacesFacet = region.getRegionFacet(SurfacesFacet.class);
 
-        for (Map.Entry<BaseVector3i, FlyingIsland> entry : flyingIslandFacet.getWorldEntries().entrySet()) {
+        for (Map.Entry<Vector3ic, FlyingIsland> entry : flyingIslandFacet.getWorldEntries().entrySet()) {
 
             Vector3i basePosition = new Vector3i(entry.getKey());
             FlyingIsland flyingIsland = entry.getValue();
@@ -49,13 +50,13 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
 
                     Vector3i surface = position.add(0, -top, 0);
 
-                    if (depth > 0 && surfacesFacet.getWorldRegion().encompasses(position)) {
-                        surfacesFacet.setWorld(JomlUtil.from(surface), true);
+                    if (depth > 0 && surfacesFacet.getWorldRegion().contains(position)) {
+                        surfacesFacet.setWorld(surface, true);
                     }
 
                     for (int j = maxTop - top; j > maxTop - depth - top; j--) {
                         Vector3i position2 = new Vector3i(i, j, k).add(basePosition);
-                        if (densityFacet.getWorldRegion().encompasses(position2)) {
+                        if (densityFacet.getWorldRegion().contains(position2)) {
                             densityFacet.setWorld(position2, maxTop - j + 1);
                         }
                     }
