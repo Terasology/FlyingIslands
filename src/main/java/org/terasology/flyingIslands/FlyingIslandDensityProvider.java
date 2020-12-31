@@ -38,22 +38,25 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
             FlyingIsland flyingIsland = entry.getValue();
 
             int extent = (int) flyingIsland.getOuterRadius();
-            int top = FlyingIsland.MAX_DEPTH;
+            int maxTop = FlyingIsland.MAX_DEPTH + FlyingIsland.MAX_HEIGHT;
 
             for (int i = -extent; i <= extent; i++) {
                 for (int k = -extent; k <= extent; k++) {
-                    Vector3i position = new Vector3i(i, top, k).add(basePosition);
+                    Vector3i position = new Vector3i(i, maxTop, k).add(basePosition);
 
-                    int height = flyingIsland.getDepth(position.x, position.z);
+                    int depth = flyingIsland.getDepth(position.x, position.z);
+                    int top = flyingIsland.getTop(position.x, position.z);
 
-                    if (height > 0 && surfacesFacet.getWorldRegion().encompasses(position)) {
-                        surfacesFacet.setWorld(JomlUtil.from(position), true);
+                    Vector3i surface = position.add(0, -top, 0);
+
+                    if (depth > 0 && surfacesFacet.getWorldRegion().encompasses(position)) {
+                        surfacesFacet.setWorld(JomlUtil.from(surface), true);
                     }
 
-                    for (int j = top; j > top - height; j--) {
+                    for (int j = maxTop - top; j > maxTop - depth - top; j--) {
                         Vector3i position2 = new Vector3i(i, j, k).add(basePosition);
                         if (densityFacet.getWorldRegion().encompasses(position2)) {
-                            densityFacet.setWorld(position2, top - j + 1);
+                            densityFacet.setWorld(position2, maxTop - j + 1);
                         }
                     }
                 }

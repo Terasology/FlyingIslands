@@ -29,7 +29,7 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
 
     @Override
     public void process(GeneratingRegion region) {
-        Border3D border = region.getBorderForFacet(FlyingIslandFacet.class).extendBy(FlyingIsland.MAX_DEPTH, FlyingIsland.MAX_DEPTH,
+        Border3D border = region.getBorderForFacet(FlyingIslandFacet.class).extendBy(FlyingIsland.MAX_HEIGHT, FlyingIsland.MAX_DEPTH,
                 FlyingIsland.MAX_WIDTH / 2);
         FlyingIslandFacet flyingIslandFacet = new FlyingIslandFacet(region.getRegion(), border);
         ElevationFacet elevationFacet = region.getRegionFacet(ElevationFacet.class);

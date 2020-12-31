@@ -20,6 +20,7 @@ public class FlyingIsland {
     public static final int MIN_RADIUS = 40;
     public static final int MAX_RADIUS = 60;
     public static final int MAX_WIDTH = 2 * MAX_RADIUS;
+    public static final int MAX_HEIGHT = 3;
     private static final float NOISE_SUBSAMPLING_CONSTANT = MIN_DEPTH / 4f;
 
     public int depth;
@@ -58,14 +59,27 @@ public class FlyingIsland {
         return center;
     }
 
-    public int getDepth(int x, int z) {
+    private float getDepthNoise(int x, int z) {
         float baseNoise = regionNoise.noise(x, z);
 
         // another noise layer to make the FlyingIsland slope curvy
         float plainNoise = tileableNoise.noise(x / NOISE_SUBSAMPLING_CONSTANT, z / NOISE_SUBSAMPLING_CONSTANT);
         float noiseSquare = (float) Math.pow(baseNoise, 3f);
         float mixedNoise = (noiseSquare * (1 + plainNoise / 10f)) / 1.1f;
+        return mixedNoise;
+    }
 
-        return (int) (mixedNoise * depth);
+    public int getDepth(int x, int z) {
+        return (int) (getDepthNoise(x, z) * depth);
+    }
+
+    public int getTop(int x, int z) {
+        float depthNoise = getDepthNoise(x, z);
+        float multiplier = 1f;
+        if (depthNoise < 0.1f) {
+            multiplier = depthNoise * 10f;
+        }
+
+        return MAX_HEIGHT - (int) (tileableNoise.noise((x + 1337) / 20f, (z - 1337) / 20f) * multiplier * MAX_HEIGHT);
     }
 }
