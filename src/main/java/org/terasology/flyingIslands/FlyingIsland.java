@@ -13,16 +13,16 @@ import org.terasology.utilities.procedural.SimplexNoise;
 import org.terasology.utilities.random.FastRandom;
 
 public class FlyingIsland {
-    public static final int MINHEIGHT = 10;
-    public static final int MAXHEIGHT = 20;
-    public static final int MINGRIDSIZE = 6;
-    public static final int MAXGRIDSIZE = 9;
-    public static final int MINRADIUS = 40;
-    public static final int MAXRADIUS = 60;
-    public static final int MAXWIDTH = 2 * MAXRADIUS;
-    private static final float NOISESUBSAMPLINGCONSTANT = MINHEIGHT / 4f;
+    public static final int MIN_DEPTH = 10;
+    public static final int MAX_DEPTH = 20;
+    public static final int MIN_GRID_SIZE = 6;
+    public static final int MAX_GRID_SIZE = 9;
+    public static final int MIN_RADIUS = 40;
+    public static final int MAX_RADIUS = 60;
+    public static final int MAX_WIDTH = 2 * MAX_RADIUS;
+    private static final float NOISE_SUBSAMPLING_CONSTANT = MIN_DEPTH / 4f;
 
-    public int height;
+    public int depth;
 
     // Mind that these values will be used for comparisons *after* squaring the base noise value
     private final float outerRadius;
@@ -35,14 +35,14 @@ public class FlyingIsland {
     public FlyingIsland(int xCenter, int zCenter) {
         int seed = xCenter + zCenter;
         FastRandom random = new FastRandom(seed);
-        int gridSize = random.nextInt(MINGRIDSIZE, MAXGRIDSIZE);
+        int gridSize = random.nextInt(MIN_GRID_SIZE, MAX_GRID_SIZE);
         tileableNoise = new SimplexNoise(seed, gridSize);
-        height = random.nextInt(MINHEIGHT, MAXHEIGHT);
-        innerRadius = random.nextFloat(MINRADIUS, (MAXRADIUS + 2f * MINRADIUS) / 3);
+        depth = random.nextInt(MIN_DEPTH, MAX_DEPTH);
+        innerRadius = random.nextFloat(MIN_RADIUS, (MAX_RADIUS + 2f * MIN_RADIUS) / 3);
 
         center = new Vector2i(xCenter, zCenter);
 
-        outerRadius = random.nextFloat((MINRADIUS + 2f * MAXRADIUS) / 3, MAXRADIUS);
+        outerRadius = random.nextFloat((MIN_RADIUS + 2f * MAX_RADIUS) / 3, MAX_RADIUS);
         regionNoise = new RegionSelectorNoise(seed, gridSize, center.x(), center.y(), innerRadius, outerRadius);
     }
 
@@ -58,14 +58,14 @@ public class FlyingIsland {
         return center;
     }
 
-    public int getHeightAndIsLava(int x, int z) {
+    public int getDepth(int x, int z) {
         float baseNoise = regionNoise.noise(x, z);
 
         // another noise layer to make the FlyingIsland slope curvy
-        float plainNoise = tileableNoise.noise(x / NOISESUBSAMPLINGCONSTANT, z / NOISESUBSAMPLINGCONSTANT);
+        float plainNoise = tileableNoise.noise(x / NOISE_SUBSAMPLING_CONSTANT, z / NOISE_SUBSAMPLING_CONSTANT);
         float noiseSquare = (float) Math.pow(baseNoise, 3f);
         float mixedNoise = (noiseSquare * (1 + plainNoise / 10f)) / 1.1f;
 
-        return (int) (mixedNoise * height);
+        return (int) (mixedNoise * depth);
     }
 }

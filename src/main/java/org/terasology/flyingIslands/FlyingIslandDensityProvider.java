@@ -19,7 +19,7 @@ import org.terasology.world.generator.plugin.RegisterPlugin;
 import java.util.Map;
 
 @RegisterPlugin
-@Requires(@Facet(value = FlyingIslandFacet.class, border = @FacetBorder(sides = FlyingIsland.MAXWIDTH / 2, top = FlyingIsland.MAXHEIGHT)))
+@Requires(@Facet(value = FlyingIslandFacet.class, border = @FacetBorder(sides = FlyingIsland.MAX_WIDTH / 2, top = FlyingIsland.MAX_DEPTH)))
 @Updates({
         @Facet(value = DensityFacet.class),
         @Facet(value = SurfacesFacet.class)
@@ -38,13 +38,13 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
             FlyingIsland flyingIsland = entry.getValue();
 
             int extent = (int) flyingIsland.getOuterRadius();
-            int top = FlyingIsland.MAXHEIGHT;
+            int top = FlyingIsland.MAX_DEPTH;
 
             for (int i = -extent; i <= extent; i++) {
                 for (int k = -extent; k <= extent; k++) {
                     Vector3i position = new Vector3i(i, top, k).add(basePosition);
 
-                    int height = flyingIsland.getHeightAndIsLava(position.x, position.z);
+                    int height = flyingIsland.getDepth(position.x, position.z);
 
                     if (height > 0 && surfacesFacet.getWorldRegion().encompasses(position)) {
                         surfacesFacet.setWorld(JomlUtil.from(position), true);
