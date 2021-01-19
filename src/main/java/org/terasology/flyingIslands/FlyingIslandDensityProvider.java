@@ -4,8 +4,6 @@
 package org.terasology.flyingIslands;
 
 import org.joml.Vector3ic;
-import org.terasology.math.JomlUtil;
-import org.terasology.math.geom.BaseVector3i;
 import org.joml.Vector3i;
 import org.terasology.world.generation.Facet;
 import org.terasology.world.generation.FacetBorder;
@@ -39,25 +37,25 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
             FlyingIsland flyingIsland = entry.getValue();
 
             int extent = (int) flyingIsland.getOuterRadius();
-            int maxTop = FlyingIsland.MAX_DEPTH + FlyingIsland.MAX_HEIGHT;
+            int maxYSize = FlyingIsland.MAX_DEPTH + FlyingIsland.MAX_HEIGHT;
 
             for (int i = -extent; i <= extent; i++) {
                 for (int k = -extent; k <= extent; k++) {
-                    Vector3i position = new Vector3i(i, maxTop, k).add(basePosition);
+                    Vector3i position = new Vector3i(i, maxYSize, k).add(basePosition);
 
-                    int depth = flyingIsland.getDepth(position.x, position.z);
-                    int top = flyingIsland.getTop(position.x, position.z);
+                    int depth = flyingIsland.getDepthRelativeToBase(position.x, position.z);
+                    int height = flyingIsland.getHeightRelativeToBase(position.x, position.z);
 
-                    Vector3i surface = position.add(0, -top, 0);
+                    Vector3i surface = position.add(0, -height, 0);
 
                     if (depth > 0 && surfacesFacet.getWorldRegion().contains(position)) {
                         surfacesFacet.setWorld(surface, true);
                     }
 
-                    for (int j = maxTop - top; j > maxTop - depth - top; j--) {
+                    for (int j = maxYSize - height; j > maxYSize - depth - height; j--) {
                         Vector3i position2 = new Vector3i(i, j, k).add(basePosition);
                         if (densityFacet.getWorldRegion().contains(position2)) {
-                            densityFacet.setWorld(position2, maxTop - j + 1);
+                            densityFacet.setWorld(position2, maxYSize - j + 1);
                         }
                     }
                 }

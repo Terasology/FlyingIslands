@@ -69,11 +69,11 @@ public class FlyingIsland {
         return mixedNoise;
     }
 
-    public int getDepth(int x, int z) {
+    public int getDepthRelativeToBase(int x, int z) {
         return (int) (getDepthNoise(x, z) * depth);
     }
 
-    public int getTop(int x, int z) {
+    public int getHeightRelativeToBase(int x, int z) {
         float depthNoise = getDepthNoise(x, z);
         float multiplier = 1f;
         if (depthNoise < 0.1f) {
