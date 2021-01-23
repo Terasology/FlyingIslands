@@ -51,8 +51,6 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
                     if (depth > 0 && surfacesFacet.getWorldRegion().contains(islandBasePosition)) {
                         surfacesFacet.setWorld(surface, true);
                     } else {
-                        int xx = 0;
-                        xx++;
                         continue;
                     }
 
