@@ -42,10 +42,8 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
                 int surfaceHeight = TeraMath.floorToInt(elevationFacet.getWorld(wx, wz));
                 int seaLevel = seaLevelFacet.getSeaLevel();
                 if (surfaceHeight > seaLevel && noise.noise(wx, wz) > 0.9999) {
-                    FlyingIsland flyingIsland = new FlyingIsland(wx, wz);
-
                     int lowestY = surfaceHeight + 60 + Math.floorMod(wx * wz, 30);
-
+                    FlyingIsland flyingIsland = new FlyingIsland(wx, lowestY, wz);
                     if (flyingIslandFacet.getWorldRegion().contains(wx, lowestY, wz)) {
                         flyingIslandFacet.setWorld(wx, lowestY, wz, flyingIsland);
                     }

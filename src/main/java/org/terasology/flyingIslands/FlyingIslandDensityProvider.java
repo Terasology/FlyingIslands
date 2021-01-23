@@ -37,25 +37,29 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
             FlyingIsland flyingIsland = entry.getValue();
 
             int extent = (int) flyingIsland.getOuterRadius();
-            int maxYSize = FlyingIsland.MAX_DEPTH + FlyingIsland.MAX_HEIGHT;
 
             for (int i = -extent; i <= extent; i++) {
                 for (int k = -extent; k <= extent; k++) {
-                    Vector3i position = new Vector3i(i, maxYSize, k).add(basePosition);
+                    Vector3i islandBasePosition = new Vector3i(i, FlyingIsland.MAX_DEPTH, k).add(basePosition);
+                    Vector3i islandBasePosition2 = new Vector3i(islandBasePosition);
 
-                    int depth = flyingIsland.getDepthRelativeToBase(position.x, position.z);
-                    int height = flyingIsland.getHeightRelativeToBase(position.x, position.z);
+                    int depth = flyingIsland.getDepthRelativeToBase(islandBasePosition.x, islandBasePosition.z);
+                    int height = flyingIsland.getHeightRelativeToBase(islandBasePosition.x, islandBasePosition.z);
 
-                    Vector3i surface = position.add(0, -height, 0);
+                    Vector3i surface = islandBasePosition.add(0, height, 0);
 
-                    if (depth > 0 && surfacesFacet.getWorldRegion().contains(position)) {
+                    if (depth > 0 && surfacesFacet.getWorldRegion().contains(islandBasePosition)) {
                         surfacesFacet.setWorld(surface, true);
+                    } else {
+                        int xx = 0;
+                        xx++;
+                        continue;
                     }
 
-                    for (int j = maxYSize - height; j > maxYSize - depth - height; j--) {
-                        Vector3i position2 = new Vector3i(i, j, k).add(basePosition);
+                    for (int j = height; j > -depth; j--) {
+                        Vector3i position2 = new Vector3i(0, j, 0).add(islandBasePosition2);
                         if (densityFacet.getWorldRegion().contains(position2)) {
-                            densityFacet.setWorld(position2, maxYSize - j + 1);
+                            densityFacet.setWorld(position2, height - j);
                         }
                     }
                 }

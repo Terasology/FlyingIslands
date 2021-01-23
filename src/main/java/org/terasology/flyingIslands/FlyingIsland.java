@@ -3,10 +3,8 @@
 
 package org.terasology.flyingIslands;
 
-//import org.terasology.entitySystem.Component;
-import org.terasology.math.geom.Vector2i;
-//import org.terasology.math.geom.Vector3i;
-//import org.terasology.nui.properties.Range;
+import org.joml.Vector2i;
+import org.joml.Vector3i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.RegionSelectorNoise;
 import org.terasology.utilities.procedural.SimplexNoise;
@@ -21,6 +19,7 @@ public class FlyingIsland {
     public static final int MAX_RADIUS = 60;
     public static final int MAX_WIDTH = 2 * MAX_RADIUS;
     public static final int MAX_HEIGHT = 3;
+    public static final int MAX_Y_SIZE = FlyingIsland.MAX_DEPTH + FlyingIsland.MAX_HEIGHT;
     private static final float NOISE_SUBSAMPLING_CONSTANT = MIN_DEPTH / 4f;
 
     public int depth;
@@ -28,12 +27,12 @@ public class FlyingIsland {
     // Mind that these values will be used for comparisons *after* squaring the base noise value
     private final float outerRadius;
     private final float innerRadius;
-    private final Vector2i center;
+    private final Vector3i center;
 
     private final Noise tileableNoise;
     private final RegionSelectorNoise regionNoise;
 
-    public FlyingIsland(int xCenter, int zCenter) {
+    public FlyingIsland(int xCenter, int yCenter, int zCenter) {
         int seed = xCenter + zCenter;
         FastRandom random = new FastRandom(seed);
         int gridSize = random.nextInt(MIN_GRID_SIZE, MAX_GRID_SIZE);
@@ -41,10 +40,10 @@ public class FlyingIsland {
         depth = random.nextInt(MIN_DEPTH, MAX_DEPTH);
         innerRadius = random.nextFloat(MIN_RADIUS, (MAX_RADIUS + 2f * MIN_RADIUS) / 3);
 
-        center = new Vector2i(xCenter, zCenter);
+        center = new Vector3i(xCenter, yCenter, zCenter);
 
         outerRadius = random.nextFloat((MIN_RADIUS + 2f * MAX_RADIUS) / 3, MAX_RADIUS);
-        regionNoise = new RegionSelectorNoise(seed, gridSize, center.x(), center.y(), innerRadius, outerRadius);
+        regionNoise = new RegionSelectorNoise(seed, gridSize, center.x(), center.z(), innerRadius, outerRadius);
     }
 
     public float getInnerRadius() {
@@ -53,10 +52,6 @@ public class FlyingIsland {
 
     public float getOuterRadius() {
         return outerRadius;
-    }
-
-    public Vector2i getCenter() {
-        return center;
     }
 
     private float getDepthNoise(int x, int z) {
@@ -80,6 +75,10 @@ public class FlyingIsland {
             multiplier = depthNoise * 10f;
         }
 
-        return MAX_HEIGHT - (int) (tileableNoise.noise((x + 1337) / 20f, (z - 1337) / 20f) * multiplier * MAX_HEIGHT);
+        return (int) (tileableNoise.noise((x + 1337) / 20f, (z - 1337) / 20f) * multiplier * MAX_HEIGHT);
+    }
+
+    public Vector3i getBottommostPoint() {
+        return new Vector3i(center.x(), center.y() + MAX_Y_SIZE - getDepthRelativeToBase(center.x(), center.z()), center.z());
     }
 }

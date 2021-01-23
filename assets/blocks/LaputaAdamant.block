@@ -1,0 +1,7 @@
+{
+    "entity": {
+        "prefab": "FlyingIslands:LaputaAdamant"
+    },
+    "basedOn": "CoreAssets:mineral",
+    "displayName": "Laputa's Adamant"
+}
