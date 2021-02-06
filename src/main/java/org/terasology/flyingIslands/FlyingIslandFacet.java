@@ -3,13 +3,13 @@
 
 package org.terasology.flyingIslands;
 
-import org.terasology.math.Region3i;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.facets.base.SparseObjectFacet3D;
 
 public class FlyingIslandFacet extends SparseObjectFacet3D<FlyingIsland> {
 
-    public FlyingIslandFacet(Region3i targetRegion, Border3D border) {
+    public FlyingIslandFacet(BlockRegion targetRegion, Border3D border) {
         super(targetRegion, border);
     }
 }

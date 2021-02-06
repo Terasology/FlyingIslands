@@ -3,11 +3,12 @@
 
 package org.terasology.flyingIslands;
 
+import org.joml.Vector2i;
 import org.terasology.math.TeraMath;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
 import org.terasology.utilities.procedural.Noise;
 import org.terasology.utilities.procedural.WhiteNoise;
+import org.terasology.world.block.BlockAreac;
+import org.terasology.world.block.BlockRegion;
 import org.terasology.world.generation.Border3D;
 import org.terasology.world.generation.Facet;
 import org.terasology.world.generation.FacetBorder;
@@ -32,10 +33,10 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
     @Override
     public void process(GeneratingRegion region) {
         Border3D border = region.getBorderForFacet(FlyingIslandFacet.class).extendBy(FlyingIsland.MAXHEIGHT, FlyingIsland.MAXHEIGHT,
-                FlyingIsland.MAXWIDTH / 2);
-        FlyingIslandFacet flyingIslandFacet = new FlyingIslandFacet(region.getRegion(), border);
+            FlyingIsland.MAXWIDTH * 2);
+        FlyingIslandFacet flyingIslandFacet = new FlyingIslandFacet(new BlockRegion(region.getRegion()), border);
         ElevationFacet elevationFacet = region.getRegionFacet(ElevationFacet.class);
-        Rect2i worldRegion = elevationFacet.getWorldRegion();
+        BlockAreac worldRegion = elevationFacet.getWorldArea();
         SeaLevelFacet seaLevelFacet = region.getRegionFacet(SeaLevelFacet.class);
 
 
@@ -46,14 +47,13 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
                 if (surfaceHeight > seaLevel && noise.noise(wx, wz) > 0.9999) {
                     FlyingIsland flyingIsland = new FlyingIsland(wx, wz);
 
-                    int lowestY = surfaceHeight + 60 +  Math.floorMod(wx * wz, 30);
-                            getLowestY(elevationFacet, new Vector2i(flyingIsland.getCenter()),
-                            (int) flyingIsland.getInnerRadius(), (int) flyingIsland.getOuterRadius());
+                    int lowestY = surfaceHeight + 60 + Math.floorMod(wx * wz, 30);
+                    getLowestY(elevationFacet, new Vector2i(flyingIsland.getCenter()),
+                        (int) flyingIsland.getInnerRadius(), (int) flyingIsland.getOuterRadius());
 
                     if (lowestY >= flyingIslandFacet.getWorldRegion().minY()
-                            && lowestY <= flyingIslandFacet.getWorldRegion().maxY()) {
-
-                        flyingIslandFacet.setWorld(wx, lowestY, wz, flyingIsland);
+                        && lowestY <= flyingIslandFacet.getWorldRegion().maxY()) {
+                            flyingIslandFacet.setWorld(wx, lowestY, wz, flyingIsland);
                     }
                 }
             }
@@ -67,7 +67,7 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
         // comment this for testing and
         // noise = new SubSampledNoise(new WhiteNoise(seed), new Vector2f(0.1f, 0.1f), Integer.MAX_VALUE);
         // uncomment this for testing, Warning: this will spam flyingIslandes into the world
-         noise = new WhiteNoise(seed);
+        noise = new WhiteNoise(seed);
     }
 
     private int getLowestY(BaseFieldFacet2D facet, Vector2i center, int minRadius, int maxRadius) {
@@ -81,11 +81,11 @@ public class FlyingIslandProvider implements FacetProviderPlugin {
         int maxRadiusSq = maxRadius * maxRadius;
         int lowestY = Integer.MAX_VALUE;
         for (Vector2i pos = new Vector2i(start); pos.x <= end.x; pos.add(stepX)) {
-            for (pos.setY(start.y); pos.y <= end.y; pos.add(stepY)) {
-                int centerDistSq = center.distanceSquared(pos);
-                if (facet.getWorldRegion().contains(pos)
-                && centerDistSq <= maxRadiusSq
-                && centerDistSq >= minRadiusSq) {
+            for (pos.y = start.y; pos.y <= end.y; pos.add(stepY)) {
+                long centerDistSq = center.distanceSquared(pos);
+                if (facet.getWorldArea().contains(pos)
+                    && centerDistSq <= maxRadiusSq
+                    && centerDistSq >= minRadiusSq) {
                     int y = (int) facet.getWorld(pos);
                     lowestY = Math.min(y, lowestY);
                 }
