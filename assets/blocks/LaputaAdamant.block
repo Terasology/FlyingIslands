@@ -1,0 +1,11 @@
+{
+    "entity": {
+        "prefab": "FlyingIslands:LaputaAdamant"
+    },
+    "basedOn": "CoreAssets:mineral",
+    "displayName": "Laputa's Adamant",
+    "tiles": {
+        "topBottom": "FlyingIslands:Adamant_topbottom",
+        "sides": "FlyingIslands:Adamant_side"
+    }
+}
