@@ -57,7 +57,7 @@ public class FlyingIslandDensityProvider implements FacetProviderPlugin {
                     for (int j = height; j > -depth; j--) {
                         Vector3i position2 = new Vector3i(0, j, 0).add(islandBasePosition2);
                         if (densityFacet.getWorldRegion().contains(position2)) {
-                            densityFacet.setWorld(position2, height - j);
+                            densityFacet.setWorld(position2, height - j + 1);
                         }
                     }
                 }
