@@ -35,9 +35,9 @@ public class LaputaAdamantRasterizer implements WorldRasterizerPlugin {
 
     @Override
     public void generateChunk(CoreChunk chunk, Region chunkRegion) {
-        FlyingIslandFacet volcanoFacet = chunkRegion.getFacet(FlyingIslandFacet.class);
+        FlyingIslandFacet flyingIslandFacet = chunkRegion.getFacet(FlyingIslandFacet.class);
 
-        for (Map.Entry<Vector3ic, FlyingIsland> entry : volcanoFacet.getWorldEntries().entrySet()) {
+        for (Map.Entry<Vector3ic, FlyingIsland> entry : flyingIslandFacet.getWorldEntries().entrySet()) {
 
             FlyingIsland flyingIsland = entry.getValue();
 
