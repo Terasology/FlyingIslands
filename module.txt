@@ -1,14 +1,14 @@
 {
     "id" : "FlyingIslands",
     "version" : "1.1.1-SNAPSHOT",
-    "author" : "sin3point14",
+    "author" : "The Terasology Foundation",
     "displayName" : "FlyingIslands",
-    "description" : "Provides Flying Islands plugins to be used in worlds",
+    "description" : "Provides Flying Islands plugins to be used in worlds.\n\nWorks well with 'FallingBlocks'.",
     "dependencies" : [
         {"id": "CoreAssets", "minVersion": "2.0.0"},
         {"id": "CoreWorlds", "minVersion": "2.0.0"},
         {"id": "CoreRendering", "minVersion": "1.0.0"},
-        {"id": "FallingBlocks", "minVersion": "1.2.0"}
+        {"id": "FallingBlocks", "minVersion": "1.2.0", "optional": true}
      ],
     "serverSideOnly" : "false",
     "isWorld": true
