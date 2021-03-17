@@ -16,4 +16,4 @@ The `FlyingIslands` module comes with a new block called "Laputa Adamant".
 This block is the heart piece of each flying island allowing it to fly.
 Should this piece be destroyed, an island will plummet to the ground.
 
-<img src="https://user-images.githubusercontent.com/29981695/109419425-af39f600-79cd-11eb-8fd8-e7bdc0a07901.png" width="300">
+![laputa_adamant](https://user-images.githubusercontent.com/1448874/111070458-209b9d80-84d2-11eb-9b62-528d94d947d8.gif)
