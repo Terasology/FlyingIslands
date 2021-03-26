@@ -10,8 +10,8 @@ import org.terasology.engine.registry.CoreRegistry;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.world.block.Block;
 import org.terasology.engine.world.block.BlockManager;
+import org.terasology.engine.world.chunks.Chunk;
 import org.terasology.engine.world.chunks.Chunks;
-import org.terasology.engine.world.chunks.CoreChunk;
 import org.terasology.engine.world.generation.Region;
 import org.terasology.engine.world.generation.RequiresRasterizer;
 import org.terasology.engine.world.generation.WorldRasterizerPlugin;
@@ -34,7 +34,7 @@ public class LaputaAdamantRasterizer implements WorldRasterizerPlugin {
     }
 
     @Override
-    public void generateChunk(CoreChunk chunk, Region chunkRegion) {
+    public void generateChunk(Chunk chunk, Region chunkRegion) {
         FlyingIslandFacet flyingIslandFacet = chunkRegion.getFacet(FlyingIslandFacet.class);
 
         for (Map.Entry<Vector3ic, FlyingIsland> entry : flyingIslandFacet.getWorldEntries().entrySet()) {
